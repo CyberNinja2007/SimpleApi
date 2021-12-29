@@ -21,11 +21,11 @@ namespace SimpleApi.Controllers
 
         // GET: api/Citizen
         [HttpGet]
-        public IEnumerable<Citizen> GetCitizens(int? page,string sex = "")
+        public IEnumerable<Citizen> GetCitizens(int? page, int? minAge, int? maxAge, string sex = "")
         {
             IEnumerable<Citizen> citizens;
-            
-            if(sex != "")
+
+            if (sex != "")
             {
                 citizens = _context.Citizens.Where(citizen => citizen.Sex == sex);
             }
@@ -33,11 +33,24 @@ namespace SimpleApi.Controllers
             {
                 citizens = _context.Citizens;
             }
+
+            if (minAge != null & maxAge == null)
+            {
+                citizens = citizens.Where(citizen => citizen.Age > minAge);
+            }
+            else if (maxAge != null & minAge == null)
+            {
+                citizens = citizens.Where(citizen => citizen.Age < maxAge);
+            }
+            else if (maxAge != null & minAge != null)
+            {
+                citizens = citizens.Where(citizen => citizen.Age > minAge & citizen.Age < maxAge);
+            }
             
             int pageNum = page ?? 1;
             int pageSize = 10;
             
-            return citizens.ToArray();
+            return citizens.ToPagedList(pageNum,pageSize);
         }
 
         // GET: api/Citizen/5
