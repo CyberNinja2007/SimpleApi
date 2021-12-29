@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SimpleApi.Data;
 using SimpleApi.Models;
 using X.PagedList;
@@ -18,12 +19,11 @@ namespace SimpleApi.Controllers
         {
             _context = context;
         }
-
-        // GET: api/Citizen
+        
         [HttpGet]
         public IEnumerable<Citizen> GetCitizens(int? page, int? minAge, int? maxAge, string sex = "")
         {
-            IEnumerable<Citizen> citizens;
+            IQueryable<Citizen> citizens;
 
             if (sex != "")
             {
@@ -50,19 +50,21 @@ namespace SimpleApi.Controllers
             int pageNum = page ?? 1;
             int pageSize = 10;
             
-            return citizens.ToPagedList(pageNum,pageSize);
+            return citizens.Select(citizen => new Citizen{
+                Id = citizen.Id,
+                Name = citizen.Name,
+                Sex = citizen.Sex
+            }).ToPagedList(pageNum,pageSize);
         }
-
-        // GET: api/Citizen/5
+        
         [HttpGet("{id}")]
-        public async Task<ActionResult<Citizen>> GetCitizen(int id)
+        public async Task<Citizen[]> GetCitizen(int id)
         {
-            var citizen = await _context.Citizens.FindAsync(id);
-
-            if (citizen == null)
-            {
-                return NotFound();
-            }
+            var citizen = await _context.Citizens.Where(citizen => citizen.Id == id).Select(citizen => new Citizen{
+                Name = citizen.Name,
+                Sex = citizen.Sex,
+                Age = citizen.Age
+            }).ToArrayAsync();
 
             return citizen;
         }
