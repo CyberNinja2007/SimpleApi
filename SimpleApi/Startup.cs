@@ -21,9 +21,8 @@ namespace SimpleApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string con = "Server=(localdb)\\mssqllocaldb;Database=usersdbstore;Trusted_Connection=True;";
-            
-            services.AddDbContext<CitizenContext>(options => options.UseSqlServer(con));
+            services.AddDbContext<CitizenContext>(options => options.UseSqlServer(
+                Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
