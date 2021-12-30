@@ -19,7 +19,7 @@ namespace SimpleApi.Controllers
         }
         
         [HttpGet]
-        public IEnumerable<Citizen> GetCitizens(int? page, int minAge = -1, int maxAge = -1, string sex = "")
+        public IEnumerable<object> GetCitizens(int? page, int minAge = -1, int maxAge = -1, string sex = "")
         {
             IQueryable<Citizen> citizens;
 
@@ -48,20 +48,20 @@ namespace SimpleApi.Controllers
             int pageNum = page ?? 1;
             int pageSize = 10;
             
-            return citizens.Select(citizen => new Citizen{
-                Id = citizen.Id,
-                Name = citizen.Name,
-                Sex = citizen.Sex
+            return citizens.Select(citizen => new {
+                id = citizen.Id,
+                name = citizen.Name,
+                sex = citizen.Sex
             }).ToPagedList(pageNum,pageSize);
         }
         
         [HttpGet("{id}")]
-        public Citizen[] GetCitizen(int id)
+        public object GetCitizen(int id)
         {
-            var citizen = _context.Citizens.Where(citizen => citizen.Id == id).Select(citizen => new Citizen{
-                Name = citizen.Name,
-                Sex = citizen.Sex,
-                Age = citizen.Age
+            var citizen = _context.Citizens.Where(citizen => citizen.Id == id).Select(citizen => new {
+                name = citizen.Name,
+                sex = citizen.Sex,
+                age = citizen.Age
             }).ToArray();
 
             return citizen;

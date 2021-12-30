@@ -48,11 +48,11 @@ namespace SimpleApi.Tests
             using(var context = new CitizenContext(options))
             {
                 var controller = new CitizenController(context);
-                var rightData = context.Citizens.Select(citizen => new Citizen
+                var rightData = context.Citizens.Select(citizen => new 
                 {
-                    Id = citizen.Id,
-                    Name = citizen.Name,
-                    Sex = citizen.Sex
+                    id = citizen.Id,
+                    name = citizen.Name,
+                    sex = citizen.Sex 
                 }).ToPagedList(1, 10);
                 
                 Assert.AreEqual(rightData.ToString(),controller.GetCitizens(null).ToString());
@@ -70,11 +70,11 @@ namespace SimpleApi.Tests
             using(var context = new CitizenContext(options))
             {
                 var controller = new CitizenController(context);
-                var rightData = context.Citizens.Where(cit => cit.Sex == "male").Select(citizen => new Citizen
+                var rightData = context.Citizens.Where(cit => cit.Sex == "male").Select(citizen => new 
                 {
-                    Id = citizen.Id,
-                    Name = citizen.Name,
-                    Sex = citizen.Sex
+                    id = citizen.Id,
+                    name = citizen.Name,
+                    sex = citizen.Sex 
                 }).ToPagedList(1, 10);
                 
                 Assert.AreEqual(rightData.ToString(),controller.GetCitizens(null,sex:"male").ToString());
@@ -92,11 +92,11 @@ namespace SimpleApi.Tests
             using(var context = new CitizenContext(options))
             {
                 var controller = new CitizenController(context);
-                var rightData = context.Citizens.Where(cit => cit.Age > 20).Select(citizen => new Citizen
+                var rightData = context.Citizens.Where(cit => cit.Age > 20).Select(citizen => new 
                 {
-                    Id = citizen.Id,
-                    Name = citizen.Name,
-                    Sex = citizen.Sex
+                    id = citizen.Id,
+                    name = citizen.Name,
+                    sex = citizen.Sex 
                 }).ToPagedList(1, 10);
                 
                 Assert.AreEqual(rightData.ToString(),controller.GetCitizens(null,20).ToString());
@@ -114,11 +114,11 @@ namespace SimpleApi.Tests
             using(var context = new CitizenContext(options))
             {
                 var controller = new CitizenController(context);
-                var rightData = context.Citizens.Where(cit => cit.Age < 50).Select(citizen => new Citizen
+                var rightData = context.Citizens.Where(cit => cit.Age < 50).Select(citizen => new 
                 {
-                    Id = citizen.Id,
-                    Name = citizen.Name,
-                    Sex = citizen.Sex
+                    id = citizen.Id,
+                    name = citizen.Name,
+                    sex = citizen.Sex 
                 }).ToPagedList(1, 10);
                 
                 Assert.AreEqual(rightData.ToString(),controller.GetCitizens(null,0,50).ToString());
@@ -137,11 +137,11 @@ namespace SimpleApi.Tests
             {
                 var controller = new CitizenController(context);
                 var rightData = context.Citizens.Where(cit => cit.Sex == "female" & cit.Age > 30 & cit.Age < 50)
-                    .Select(citizen => new Citizen 
+                    .Select(citizen => new 
                     { 
-                        Id = citizen.Id,
-                        Name = citizen.Name,
-                        Sex = citizen.Sex 
+                        id = citizen.Id,
+                        name = citizen.Name,
+                        sex = citizen.Sex 
                     }).ToPagedList(1, 10);
                 
                 Assert.AreEqual(rightData.ToString(),controller.GetCitizens(null,30,50,"female").ToString());
@@ -159,10 +159,10 @@ namespace SimpleApi.Tests
             using(var context = new CitizenContext(options))
             {
                 var controller = new CitizenController(context);
-                var rightData = context.Citizens.Where(citizen => citizen.Id == 1).Select(citizen => new Citizen{
-                    Name = citizen.Name,
-                    Sex = citizen.Sex,
-                    Age = citizen.Age
+                var rightData = context.Citizens.Where(citizen => citizen.Id == 1).Select(citizen => new {
+                    name = citizen.Name,
+                    sex = citizen.Sex,
+                    age = citizen.Age
                 }).ToArray();
                 
                 Assert.AreEqual(rightData.ToString(),controller.GetCitizen(1).ToString());
