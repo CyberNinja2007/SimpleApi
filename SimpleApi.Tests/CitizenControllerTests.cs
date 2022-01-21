@@ -5,7 +5,6 @@ using NUnit.Framework;
 using SimpleApi.Controllers;
 using SimpleApi.Data;
 using SimpleApi.Models;
-using X.PagedList;
 
 namespace SimpleApi.Tests
 {
@@ -53,9 +52,9 @@ namespace SimpleApi.Tests
                     id = citizen.Id,
                     name = citizen.Name,
                     sex = citizen.Sex 
-                }).ToPagedList(1, 10);
+                }).Skip(1 * 10).Take(10).ToList();
                 
-                Assert.AreEqual(rightData.ToString(),controller.GetCitizens(null).ToString());
+                Assert.AreEqual(rightData.ToString(),controller.GetCitizens(null,null,null,null).ToString());
             }
         }
         
@@ -75,9 +74,9 @@ namespace SimpleApi.Tests
                     id = citizen.Id,
                     name = citizen.Name,
                     sex = citizen.Sex 
-                }).ToPagedList(1, 10);
+                }).Skip(1 * 10).Take(10).ToList();
                 
-                Assert.AreEqual(rightData.ToString(),controller.GetCitizens(null,sex:"male").ToString());
+                Assert.AreEqual(rightData.ToString(),controller.GetCitizens(null,null,null,null,sex:"male").ToString());
             }
         }
         
@@ -97,9 +96,9 @@ namespace SimpleApi.Tests
                     id = citizen.Id,
                     name = citizen.Name,
                     sex = citizen.Sex 
-                }).ToPagedList(1, 10);
+                }).Skip(1 * 10).Take(10).ToList();
                 
-                Assert.AreEqual(rightData.ToString(),controller.GetCitizens(null,20).ToString());
+                Assert.AreEqual(rightData.ToString(),controller.GetCitizens(null,null,null,20).ToString());
             }
         }
         
@@ -119,9 +118,9 @@ namespace SimpleApi.Tests
                     id = citizen.Id,
                     name = citizen.Name,
                     sex = citizen.Sex 
-                }).ToPagedList(1, 10);
+                }).Skip(1 * 10).Take(10).ToList();
                 
-                Assert.AreEqual(rightData.ToString(),controller.GetCitizens(null,0,50).ToString());
+                Assert.AreEqual(rightData.ToString(),controller.GetCitizens(null,null,0,50).ToString());
             }
         }
         
@@ -142,9 +141,9 @@ namespace SimpleApi.Tests
                         id = citizen.Id,
                         name = citizen.Name,
                         sex = citizen.Sex 
-                    }).ToPagedList(1, 10);
+                    }).Skip(1 * 10).Take(10).ToList();
                 
-                Assert.AreEqual(rightData.ToString(),controller.GetCitizens(null,30,50,"female").ToString());
+                Assert.AreEqual(rightData.ToString(),controller.GetCitizens(null,null,30,50,"female").ToString());
             }
         }
         
@@ -159,7 +158,9 @@ namespace SimpleApi.Tests
             using(var context = new CitizenContext(options))
             {
                 var controller = new CitizenController(context);
-                var rightData = context.Citizens.Where(citizen => citizen.Id == 1).Select(citizen => new {
+
+                var rightData = context.Citizens.Where(citizen => citizen.Id == 1).Select(citizen => new
+                {
                     name = citizen.Name,
                     sex = citizen.Sex,
                     age = citizen.Age
