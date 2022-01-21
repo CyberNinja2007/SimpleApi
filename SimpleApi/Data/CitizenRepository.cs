@@ -68,10 +68,10 @@ namespace SimpleApi.Data
  
         public void Delete(int id)
         {
-            Citizen book = _context.Citizens.Find(id);
+            Citizen citizen = _context.Citizens.Find(id);
             
-            if(book!=null)
-                _context.Citizens.Remove(book);
+            if(citizen!=null)
+                _context.Citizens.Remove(citizen);
         }
  
         public void Save()
